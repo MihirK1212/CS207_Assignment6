@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Course</title>
+</head>
+<body>
+    <div class="dropdown">
+        <button class="btn btn-secondary dropdown-toggle" type="submit" id="dropdownMenuButton1" data-bs-toggle="dropdown" aria-expanded="false">
+          Select Department
+        </button>
+        <ul class="dropdown-menu dropdown-menu-dark" aria-labelledby="navbarDarkDropdownMenuLink">
+            <li><a class="dropdown-item" href="/search_course/Computer Science and Engineering">Computer Science and Engineering</a></li>
+            <li><a class="dropdown-item" href="/search_course/Civil Engineering">Civil Engineering</a></li>
+            <li><a class="dropdown-item" href="/search_course/Electrical Engineering">Electrical Engineering</a></li>
+            <li><a class="dropdown-item" href="/search_course/Mechanical Engineering">Mechanical Engineering</a></li>
+            <li><a class="dropdown-item" href="/search_course/MEMS Engineering">MEMS Engineering</a></li>
+        </ul>
+    </div>
+
+    {% if check!=True %}
+        Please Select a Department
+
+    {% else %}
+
+        <h1 align="center">Courses of {{ d_name }}</h1><br>
+
+        <form action="/search_course/{{ d_name }}" method="post">
+            <label for="faculty">Faculty:</label>
+            <select name="faculty" id="faculty">
+            <option value="None"> None  </option>
+            {% for faculty in session.faculty %}
+                <option value="{{ faculty[1] }}" id="{{ faculty[1] }}">{{ faculty[1] }}-{{ faculty[0] }}  </option>
+            {% endfor %}
+            </select><br>
+
+            <label for="start_year">Start Year:</label>
+                <select name="start_year" id="start_year">
+                <option value="None" > None  </option>
+                <option value="2011" id="2011s"> 2011  </option>
+                <option value="2012" id="2012s"> 2012  </option>
+                <option value="2013" id="2013s"> 2013  </option>
+                <option value="2014" id="2014s"> 2014  </option>
+                <option value="2015" id="2015s"> 2015  </option>
+                <option value="2016" id="2016s"> 2016  </option>
+                <option value="2017" id="2017s"> 2017  </option>
+                <option value="2018" id="2018s"> 2018  </option>
+                <option value="2019" id="2019s"> 2019  </option>
+                <option value="2020" id="2020s"> 2020  </option>
+            </select><br>
+
+            <label for="end_year">End Year:</label>
+            <select name="end_year" id="end_year">
+                <option value="None" > None  </option>
+                <option value="2011" id="2011e"> 2011  </option>
+                <option value="2012" id="2012e"> 2012  </option>
+                <option value="2013" id="2013e"> 2013  </option>
+                <option value="2014" id="2014e"> 2014  </option>
+                <option value="2015" id="2015e"> 2015  </option>
+                <option value="2016" id="2016e"> 2016  </option>
+                <option value="2017" id="2017e"> 2017  </option>
+                <option value="2018" id="2018e"> 2018  </option>
+                <option value="2019" id="2019e"> 2019  </option>
+                <option value="2020" id="2020e"> 2020  </option>
+            </select><br>
+
+            <input type="submit" value="Filter">
+        </form>
+        <table>
+            {% for course in course %}
+            <tr>
+                <td>{{ course[0] }}</td>
+                <td>{{ course[1] }}</td>
+            </tr>
+            {% endfor %}
+        </table>
+    {% endif %}
+</body>
+</html>
