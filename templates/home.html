@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <!-- Required meta tags -->
+    <meta charset="utf-8" />
+    <meta
+      name="viewport"
+      content="width=device-width, initial-scale=1, shrink-to-fit=no"
+    />
+
+    <link
+      rel="stylesheet"
+      type="text/css"
+      href="{{ url_for('static',filename='css/styles.css') }}"
+    />
+    <!-- Bootstrap CSS -->
+    <link
+      rel="stylesheet"
+      href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css"
+      integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T"
+      crossorigin="anonymous"
+    />
+
+    <title>Home Page</title>
+  </head>
+
+  <body>
+    <!-- <div class="dropdown">
+      <button class="btn btn-secondary dropdown-toggle" type="submit" id="dropdownMenuButton1" data-bs-toggle="dropdown" aria-expanded="false">
+        Select Department
+      </button>
+      <ul class="dropdown-menu dropdown-menu-dark" aria-labelledby="navbarDarkDropdownMenuLink">
+          <li><a class="dropdown-item" href="/updateVaccine">COVID-19 Vaccination</a></li>
+          <li><a class="dropdown-item" href="/updateOxygen">COVID-19 Oxygen Status</a></li>
+          <li><a class="dropdown-item" href="/updateSurgery">Surgery and Emergency</a></li>
+          <li><a class="dropdown-item" href="/updateBeds">COVID-19 Beds</a></li>
+          <li><a class="dropdown-item" href="/updateBlood">Blood Donation</a></li>
+          <li><a class="dropdown-item" href="/updateAmbulance">Ambulance Details</a></li>
+          
+      </ul>
+    </div> -->
+    
+    <div class="buttonContainer">
+      <div class="innerDiv">
+        <a href="/getSummary" type="button" class="routeBtn">Summary</a>
+      </div>
+    </div>
+
+    <div class="buttonContainer">
+      <div class="innerDiv">
+        <a href="/search_faculty/none" type="button" class="routeBtn">Search Faculty</a>
+      </div>
+    </div>
+
+    <div class="buttonContainer">
+      <div class="innerDiv">
+        <a href="/" type="button" class="routeBtn">Search Course</a>
+      </div>
+    </div>
+
+    <div class="buttonContainer">
+      <div class="innerDiv">
+        <a href="/" type="button" class="routeBtn">Add Course</a>
+      </div>
+    </div>
+
+
+    <!-- <script src="index.js"></script> -->
+    <script
+      src="https://code.jquery.com/jquery-3.3.1.slim.min.js"
+      integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo"
+      crossorigin="anonymous"
+    ></script>
+    <script
+      src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js"
+      integrity="sha384-UO2eT0CpHqdSJQ6hJty5KVphtPhzWj9WO1clHTMGa3JDZwrnQq4sF86dIHNDz0W1"
+      crossorigin="anonymous"
+    ></script>
+    <script
+      src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js"
+      integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM"
+      crossorigin="anonymous"
+    ></script>
+  </body>
+</html>

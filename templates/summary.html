@@ -1,0 +1,112 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Get Summary</title>
+    <link
+      rel="stylesheet"
+      type="text/css"
+      href="{{ url_for('static',filename='css/styles.css') }}"
+    />
+    <link
+      href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.1/dist/css/bootstrap.min.css"
+      rel="stylesheet"
+      integrity="sha384-F3w7mX95PdgyTmZZMECAngseQB83DfGTowi0iMjiWaeVhAn4FJkqJByhZMI3AhiU"
+      crossorigin="anonymous"
+    />
+  </head>
+  <body>
+    <script
+      src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.1/dist/js/bootstrap.bundle.min.js"
+      integrity="sha384-/bQdsTh/da6pkI1MST/rWKFNjaCP5gBSY4sEBT38Q/9RBh9AH40zEOg7Hlq2THRZ"
+      crossorigin="anonymous"
+    ></script>
+
+    <br>    
+    <form action="/getSummary" method="POST" class="summaryForm">
+        <h4>Select Semester</h4>
+        <div class="form-check">
+            <input class="form-check-input" type="radio" name="semester" id="spring"  value="Spring">
+            <label class="form-check-label" for="spring">
+              Spring
+            </label>
+        </div>
+          <div class="form-check">
+            <input class="form-check-input" type="radio" name="semester" id="autumn" value="Autumn" checked>
+            <label class="form-check-label" for="autumn">
+              Autumn
+            </label>
+        </div>
+
+        <br>
+
+        <div class="row g-3 align-items-center">
+            <div class="col-auto">
+              <label for="year" class="col-form-label">Enter Year</label>
+            </div>
+            <div class="col-auto">
+              <input type="number" id="year" name="year" class="form-control">
+            </div>
+            <div class="col-auto">
+            </div>
+        </div>
+
+        <button class="btn btn-primary" id="getSummaryBtn" style="margin-left: 640px; margin-top: 40px;">Get Course List</button>
+  </form>
+
+  <br>
+
+  {% if courseDetails|length == 0 %}
+    No Courses to Show    
+  {% else %}
+  <table class="coursesTable" >
+    <thead class="thead">
+        <tr>
+            <th>Course ID</th>
+            <th>Course Name</th>
+            <th>Department Name</th>
+            <th>Faculty ID</th>
+            <th>Faculty Name</th>
+            <th>Weekday</th>
+            <th>Start Time</th>
+            <th>End Time</th>
+            <th>Semester</th>
+            <th>Room Number</th>
+            <th>Year</th>
+        </tr>
+    </thead>
+    <tbody class="tbody">
+      {% for course in courseDetails %}
+      <tr>
+        <td>{{ course[0] }}</td>
+        <td>{{ course[1] }}</td>
+        <td>{{ course[2] }}</td>
+        <td>{{ course[3] }}</td>
+        <td>{{ course[4] }}</td>
+        <td>{{ course[5] }}</td>
+        <td>{{ course[6] }}</td>
+        <td>{{ course[7] }}</td>
+        <td>{{ course[8] }}</td>
+        <td>{{ course[9] }}</td>
+        <td>{{ course[10] }}</td>
+      </tr>
+      {% endfor %}  
+      </tbody>
+  </table>
+    
+  {% endif %}
+
+
+  
+
+
+
+    <script
+      src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.1/dist/js/bootstrap.bundle.min.js"
+      integrity="sha384-/bQdsTh/da6pkI1MST/rWKFNjaCP5gBSY4sEBT38Q/9RBh9AH40zEOg7Hlq2THRZ"
+      crossorigin="anonymous"
+    ></script>
+  </body>
+</html>
