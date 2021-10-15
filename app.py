@@ -47,41 +47,37 @@ def search_faculty(dept_name):
         course=request.form['course']
         s_time=request.form['s_time']
         l_time = request.form['l_time']
-        s_sem = request.form['s_sem']
-        l_sem = request.form['l_sem']
-        if l_time!='':
-            print(1)
-            query = '''
-                    SELECT cf.Faculty_ID,f.Faculty_Name,cf.Year,cf.Semester
-                    FROM Course_Has_Faculty cf
-                    JOIN Faculty f on cf.Faculty_ID = f.Faculty_ID
-                    JOIN Course c on cf.Course_ID = c.Course_ID
-                    WHERE cf.Year>='%s' AND cf.Year<='%s' AND c.course_Name='%s' ''' % (s_time, l_time,course)
+        print(course)
+        print(s_time)
+        print(l_time)
 
-        elif s_time!='':
-            print(2)
+        if int(s_time)==0:
+            s_time=2009
+        if int(l_time)==0:
+            l_time=2021
+
+        if course!='All':
             query = '''
                     SELECT cf.Faculty_ID,f.Faculty_Name,cf.Year,cf.Semester
                     FROM Course_Has_Faculty cf
                     JOIN Faculty f on cf.Faculty_ID = f.Faculty_ID
                     JOIN Course c on cf.Course_ID = c.Course_ID
-                    WHERE cf.Year='%s' AND cf.Semester='%s'AND c.course_Name='%s' ''' % (s_time, s_sem,course)
+                    WHERE cf.Year>=%s AND cf.Year<=%s AND c.course_Name='%s' ''' % (int(s_time), int(l_time),course)
         else:
-            print(3)
-            query = '''
-                    SELECT cf.Faculty_ID,f.Faculty_Name,cf.Year,cf.Semester
+            print("kuch nahi")
+            query = '''SELECT cf.Faculty_ID,f.Faculty_Name,cf.Year,cf.Semester
                     FROM Course_Has_Faculty cf
                     JOIN Faculty f on cf.Faculty_ID = f.Faculty_ID
-                    JOIN Course c on cf.Course_ID = c.Course_ID
-                    WHERE c.course_Name='%s' ''' % (course)
-
+                    JOIN Course c on cf.Course_ID = c.Course_ID and c.Department_Name = '%s'
+                    WHERE cf.Year>=%s AND cf.Year<=%s ''' % (session['dept_name'],int(s_time), int(l_time))
         cur = myconn.cursor()
         cur.execute(query)
         courseDetails = cur.fetchall()
-        return render_template('search_faculty.html',check=True,faculty=courseDetails,query_details=[course,s_time,l_time,s_sem,l_sem],d_name=session['dept_name'])
+        print(courseDetails)
+        return render_template('search_faculty.html',check=True,faculty=courseDetails,query_details=[course,s_time,l_time],d_name=session['dept_name'])
 
     if session['dept_name'] == 'none':
-        return render_template('search_faculty.html',check=False,query_details=['','','','',''],d_name=session['dept_name'])
+        return render_template('search_faculty.html',check=False,query_details=['','',''],d_name=session['dept_name'])
     else:
         dept = session['dept_name']
         cur = myconn.cursor()
@@ -95,7 +91,7 @@ def search_faculty(dept_name):
         cur.execute(q)
         d = cur.fetchall()
         session['dept']=d
-        return render_template('search_faculty.html',check=True,query_details=['','','','',''],d_name=session['dept_name'])
+        return render_template('search_faculty.html',check=True,query_details=['','',''],d_name=session['dept_name'])
 
 
 
