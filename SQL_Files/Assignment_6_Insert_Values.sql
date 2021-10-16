@@ -55,7 +55,7 @@ VALUES
 ('EE2','FAEE4',2019,'Autumn',44);
 
 
-INSERT INTO `TimeTable` (Course_ID,Start_Time,End_Time,Year,Weekday,Room_No,Semester)
+INSERT INTO `TimeTable` (Course_ID,Start_Time,End_Time,Year,Weekda,Room_No,Semester)
 VALUES
 ('CS2','08:00:00','10:00:00',2015,'Monday','L103','Spring'),
 ('CS2','08:00:00','10:00:00',2015,'Tuesday','L103','Spring'),

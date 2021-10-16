@@ -141,6 +141,136 @@ def search_course(dept_name):
         session['faculty'] = list(set(faculty))
         session['dept'] = dept
         return render_template('search_course.html', check=True, course=course,d_name=session['dept_name_course'])
-    
+
+cur = myconn.cursor()
+
+def update_dep_list():
+    cur.execute('SELECT * FROM department')
+    dept_list = cur.fetchall()
+    return dept_list
+
+# dept_list = update_dep_list()
+
+@app.route('/addEntry')
+def home():
+    dept_list = update_dep_list()
+    return render_template('add.html', dept_list=dept_list)
+
+@app.route('/add-department', methods=['GET', 'POST'])
+def add_department():
+    dept = ""
+    if request.method == "POST":
+        dept_name = request.form.get('dept_name')
+        dept_name = dept_name.upper()
+        cur.execute('SELECT * FROM department WHERE Department_Name = %s', (dept_name, ))
+        present = cur.fetchone()
+        if present == None:
+            cur.execute('INSERT INTO department VALUES (%s)', (dept_name, ))
+            myconn.commit()
+            # dept_list = update_dep_list()
+            dept = "Added Successfully!!"
+        else:
+            dept = "Department is already present in the database"
+    dept_list = update_dep_list()
+    return render_template('add.html', dept=dept, dept_list=dept_list)
+
+@app.route('/add-course', methods=['GET', 'POST'])
+def add_course():
+    crs = ""
+    if request.method == "POST":
+        dept_name = request.form.get('dept_name')
+        course_id = request.form.get('course_id')
+        course_name = request.form.get('course_name')
+        cur.execute('SELECT * FROM course WHERE Course_ID = %s', (course_id, ))
+        course_id_present = cur.fetchone()
+        if course_id_present == None:
+            cur.execute('INSERT INTO course VALUES (%s, %s, %s)', (course_id, course_name, dept_name, ))
+            myconn.commit()
+            crs = "Added Successfully!!"
+        else:
+            crs = "There is already a course with this Course ID"
+    dept_list = update_dep_list()
+    return render_template('add.html', crs=crs, dept_list=dept_list)
+
+@app.route('/add-faculty', methods=['GET', 'POST'])
+def add_faculty():
+    fac = ""
+    if request.method == "POST":
+        dept_name = request.form.get('dept_name')
+        faculty_id = request.form.get('faculty_id')
+        faculty_name = request.form.get('faculty_name')
+        cur.execute('SELECT * FROM faculty WHERE Faculty_ID = %s', (faculty_id, ))
+        faculty_id_present = cur.fetchone()
+        if faculty_id_present == None:
+            cur.execute('INSERT INTO faculty VALUES (%s, %s, %s)', (faculty_id, faculty_name, dept_name, ))
+            myconn.commit()
+            fac = "Added Successfully!!"
+        else:
+            fac = "There is already a faculty present with this Faculty ID"
+    dept_list = update_dep_list()
+    return render_template('add.html', fac=fac, dept_list=dept_list)
+
+@app.route('/add-course-faculty', methods=['GET', 'POST'])
+def add_course_faculty():
+    adcf = ""
+    faculty_id = request.form.get('faculty_id')
+    course_id = request.form.get('course_id')
+    year = request.form.get('year')
+    semester = request.form.get('semester')
+    students = request.form.get('students')
+    cur.execute('SELECT * FROM faculty WHERE Faculty_ID = %s', (faculty_id, ))
+    faculty_id_present = cur.fetchone()
+    if faculty_id_present == None:
+        adcf = "There is no faculty with this Faculty ID in database"
+    else:
+        cur.execute('SELECT * FROM course WHERE Course_ID = %s', (course_id, ))
+        course_id_presesnt = cur.fetchone()
+        if course_id_presesnt == None:
+            adcf = "There is no course with this Course ID in database"
+        else:
+            cur.execute('SELECT * FROM course_has_faculty WHERE Course_ID = %s AND Faculty_ID = %s AND Year = %s AND Semester = %s', (course_id, faculty_id, year, semester, ))
+            query_present = cur.fetchone()
+            if query_present == None:
+                cur.execute('INSERT INTO course_has_faculty VALUES (%s, %s, %s, %s, %s)', (course_id, faculty_id, year, semester, students, ))
+                myconn.commit()
+                adcf = "Added Successfully!!"
+            else:
+                adcf = "Please don't make redundant entries"
+    dept_list = update_dep_list()
+    return render_template('add.html', adcf=adcf, dept_list=dept_list)
+
+@app.route('/add-classes', methods=['GET', 'POST'])
+def add_classes():
+    adcl = ""
+    course_id = request.form.get('course_id')
+    start_time = request.form.get('start_time')
+    end_time = request.form.get('end_time')
+    year = request.form.get('year')
+    weekday = request.form.get('weekday')
+    room_no = request.form.get('room_no')
+    semester = request.form.get('semester')
+    # faculty_id = request.form.get('faculty_id')
+    cur.execute('SELECT * FROM course_has_faculty WHERE Course_ID = %s AND Year = %s AND Semester = %s', (course_id, year, semester, ))
+    entry_present_in_course_has_faculty = cur.fetchone()
+    if entry_present_in_course_has_faculty == None:
+        adcl = "Please first add course with faculty"
+    else:
+        cur.execute('SELECT * FROM timetable WHERE Course_ID = %s AND Start_Time = %s AND End_Time = %s AND Year = %s AND Weekda = %s AND Room_No = %s AND Semester = %s', (course_id, start_time, end_time, year, weekday, room_no, semester, ))
+        query_present = cur.fetchone()
+        if query_present == None:
+            cur.execute('SELECT * FROM timetable WHERE Year = %s AND Weekda = %s AND Room_No = %s AND Semester = %s AND ((Start_Time < %s AND Start_Time > %s) OR (End_Time > %s AND End_Time < %s) OR (Start_Time > %s AND End_Time < %s) OR (Start_Time <= %s AND End_Time >= %s))', (year, weekday, room_no, semester, end_time, start_time, start_time, end_time, start_time, end_time, start_time, end_time, ))
+            conflicting_time = cur.fetchone()
+            if conflicting_time != None:
+                adcl = "Entries you made are conflicting"
+            else:
+                cur.execute('INSERT INTO timetable VALUES (%s, %s, %s, %s, %s, %s, %s)', (course_id, start_time, end_time, year, weekday, room_no, semester, ))
+                myconn.commit()
+                adcl = "Added Successfully!!"
+        else:
+            adcl = "Please don't make redundant entries"
+    dept_list = update_dep_list()
+    return render_template('add.html', adcl=adcl, dept_list=dept_list)
+
+   
 if __name__ == '__main__':
     app.run(debug=True, port=8000)

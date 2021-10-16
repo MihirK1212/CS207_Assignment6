@@ -32,9 +32,9 @@ CREATE TABLE IF NOT EXISTS `TimeTable` (
   `Start_Time` TIME,
   `End_Time` TIME,
   `Year` INT ,
-  `Weekday` VARCHAR(45) ,
+  `Weekda` VARCHAR(45) ,
   `Room_No` VARCHAR(45) ,
   `Semester` VARCHAR(45) ,
-  PRIMARY KEY(`Course_ID`,`Start_Time`,`End_Time`,`Year`,`Weekday`,`Room_No`,`Semester`),
+  PRIMARY KEY(`Course_ID`,`Start_Time`,`End_Time`,`Year`,`Weekda`,`Room_No`,`Semester`),
   FOREIGN KEY (`Course_ID`) REFERENCES `Course` (`Course_ID`) ON DELETE CASCADE);
 

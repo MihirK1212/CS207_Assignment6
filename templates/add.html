@@ -1,0 +1,114 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Home Page</title>
+</head>
+<body>
+    <form action="/add-department" method="post">
+        <h2>Add a New Department Department</h2>
+        <span>Enter Department Name</span> <br>
+        <input type="text" name="dept_name" id="" required> <br>
+        <input type="submit" value="Add Department">
+        {% if dept == "Added Successfully!!" or dept == "Department is already present in the database" %}
+            <br> <span>{{ dept }}</span> <br>
+        {% endif %}
+    </form>
+
+    <form action="/add-course" method="post">
+        <h2>Add Course </h2>
+        <span>Select the department of the course</span> <br>
+        <select name="dept_name" id="" required>
+            <option value="" selected>Choose Department of Faculty</option>
+            {% for de in dept_list %}
+                <option value="{{ de[0] }}">{{ de[0] }}</option>
+            {% endfor %}
+        </select> <br>
+        <span>Enter Course ID</span> <br>
+        <input type="text" name="course_id" id="" required> <br>
+        <span>Enter Course Name</span> <br>
+        <input type="text" name="course_name" id="" required> <br>
+        <input type="submit" value="Add Course">
+        {% if crs == "Added Successfully!!" or crs == "No such department in the database" or crs == "There is already a course with this Course ID" %}
+            <br> <span>{{ crs }}</span> <br>           
+        {% endif %}
+    </form>
+
+    <form action="/add-faculty" method="post">
+        <h2>Add Faculty</h2>
+        <span>Enter the department of faculty</span> <br>
+        <select name="dept_name" id="" required>
+            <option value="">Choose Department of Faculty</option>
+            {% for de in dept_list %}
+                <option value="{{ de[0] }}">{{ de[0] }}</option>
+            {% endfor %}
+        </select> <br>
+        <span>Enter Faculty ID</span> <br>
+        <input type="text" name="faculty_id" id="" required> <br>
+        <span>Enter Faculty Name</span> <br>
+        <input type="text" name="faculty_name" id=""> <br>
+        <input type="submit" value="Add Faculty">
+        {% if fac == "Added Successfully!!" or fac == "There is already a faculty present with this Faculty ID" %}
+            <br> <span>{{ fac }}</span> <br>
+        {% endif %}
+    </form>
+
+    <form action="/add-course-faculty", method="post">
+        <h2>Add Course and Faculty</h2>
+        <span>Enter Faculty ID</span> <br>
+        <input type="text" name="faculty_id" id="" required> <br>
+        <span>Enter the course taught by faculty</span> <br>
+        <input type="text" name="course_id" id="" required> <br>
+        <span>Enter year</span> <br>
+        <input type="number" name="year" id="" min="2009" max="2099" step="1" value="2021" required> <br>
+        <span>Input semester</span> <br>
+        <select name="semester" id="">
+            <option value="autumn">Autumn</option>
+            <option value="spring">Spring</option>
+        </select> <br>
+        <span>Enter number of students registered in the course</span> <br>
+        <input type="number" name="students" id=""> <br>
+        <input type="submit" value="Submit">
+        {% if adcf == "There is no faculty with this Faculty ID in database" or adcf == "There is no course with this Course ID in database" or adcf == "Added Successfully!!" or adcf == "Please don't make redundant entries" %}
+            <br> <span>{{ adcf }}</span> <br>
+        {% endif %}
+    </form>
+
+    <form action="/add-classes" method="post">
+        <h2>Add Classes</h2>
+        <span>Enter Course ID</span> <br>
+        <input type="text" name="course_id" id="" required> <br>
+        <!-- <span>Enter Faculty ID</span> <br>
+        <input type="text" name="faculty_id" id=""> <br> -->
+        <span>Enter Year</span> <br>
+        <input type="number" name="year" id="" min="2009" max="2099" step="1" value="2021" required> <br>
+        <span>Input semester</span> <br>
+        <select name="semester" id="">
+            <option value="autumn">Autumn</option>
+            <option value="spring">Spring</option>
+        </select> <br>
+        <span>Enter start time and the end time of class</span> <br>
+        <input type="time" name="start_time" id="" required>
+        <input type="time" name="end_time" id="" required> <br>
+        <span>Enter weekday</span> <br>
+        <select name="weekday" id="" required>
+            <option value="Monday">Monday</option>
+            <option value="Tuesday">Tuesday</option>
+            <option value="Wednesday">Wednesday</option>
+            <option value="Thursday">Thursday</option>
+            <option value="Friday">Friday</option>
+            <option value="Saturday">Saturday</option>
+            <option value="Sunday">Sunday</option>
+        </select> <br>
+        <span>Enter the Room No.</span> <br>
+        <input type="text" name="room_no" id="" required> <br>
+        <input type="submit" value="Submit">
+        {% if adcl == "Please first add course with faculty" or adcl == "Added Successfully!!" or adcl == "Please don't make redundant entries" or adcl == "Entries you made are conflicting" %}
+            <br> <span>{{ adcl }}</span> <br>
+        {% endif %}
+    </form>
+
+</body>
+</html>
