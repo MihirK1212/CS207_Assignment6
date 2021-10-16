@@ -271,6 +271,43 @@ def add_classes():
     dept_list = update_dep_list()
     return render_template('add.html', adcl=adcl, dept_list=dept_list)
 
+@app.route('/editEntry', methods=['GET', 'POST'])
+def edit():
+    return render_template('edit_entry.html')
+
+@app.route('/deltRelationship', methods=['GET', 'POST'])
+def deltRelationship():
+    if request.method=='POST':
+        deleteDetails = request.form
+        deltYear = deleteDetails['deltYear']
+        deltSemester = deleteDetails['deltSemester']
+        deltCID = deleteDetails['deltCID']
+        deltFID = deleteDetails['deltFID']
+        print(deltYear,deltSemester,deltCID,deltFID)
+
+        if deltSemester!='Both':
+            query1 = ''' DELETE FROM TimeTable
+                WHERE Course_ID = '%s' and Year=%s and Semester='%s'
+                ''' % (deltCID,deltYear,deltSemester)
+            query2 = ''' DELETE FROM Course_Has_Faculty 
+                WHERE Course_ID = '%s' and Faculty_ID = '%s' and Year=%s and Semester='%s'
+                ''' % (deltCID,deltFID,deltYear,deltSemester)
+        else:
+            query1 = ''' DELETE FROM TimeTable
+                WHERE Course_ID = '%s' and Year=%s
+                ''' % (deltCID,deltYear)
+            query2 = ''' DELETE FROM Course_Has_Faculty 
+                WHERE Course_ID = '%s' and Faculty_ID = '%s' and Year=%s
+                ''' % (deltCID,deltFID,deltYear)
+        
+        cur = myconn.cursor()
+        cur.execute(query1)
+        myconn.commit()
+        cur.execute(query2)
+        myconn.commit()
+
+    return render_template('edit_entry.html')
+
    
 if __name__ == '__main__':
     app.run(debug=True, port=8000)

@@ -19,11 +19,15 @@ CREATE TABLE IF NOT EXISTS `Faculty` (
 CREATE TABLE IF NOT EXISTS `Course_Has_Faculty` (
   `Course_ID` VARCHAR(45) NOT NULL,
   `Faculty_ID` VARCHAR(45) NOT NULL,
-  `Year` INT NOT NULL,
-  `Semester` VARCHAR(45) NOT NULL,
+  `Year` INT,
+  `Semester` VARCHAR(45),
   `Students` INT,
   PRIMARY KEY (`Course_ID`, `Faculty_ID`,`Year`,`Semester`),
- FOREIGN KEY (`Course_ID`) REFERENCES `Course` (`Course_ID`) ON DELETE CASCADE,
+  KEY(`Course_ID`),
+   KEY(`Year`),
+   KEY(`Semester`),
+   KEY(`Course_ID`,`Year`,`Semester`),
+  FOREIGN KEY (`Course_ID`) REFERENCES `Course` (`Course_ID`) ON DELETE CASCADE,
  FOREIGN KEY (`Faculty_ID`) REFERENCES `Faculty` (`Faculty_ID`) ON DELETE CASCADE);
     
     
@@ -36,5 +40,5 @@ CREATE TABLE IF NOT EXISTS `TimeTable` (
   `Room_No` VARCHAR(45) ,
   `Semester` VARCHAR(45) ,
   PRIMARY KEY(`Course_ID`,`Start_Time`,`End_Time`,`Year`,`Weekda`,`Room_No`,`Semester`),
-  FOREIGN KEY (`Course_ID`) REFERENCES `Course` (`Course_ID`) ON DELETE CASCADE);
-
+ FOREIGN KEY (`Course_ID`,`Year`,`Semester`) REFERENCES `Course_Has_Faculty` (`Course_ID`,`Year`,`Semester`) ON DELETE CASCADE
+);

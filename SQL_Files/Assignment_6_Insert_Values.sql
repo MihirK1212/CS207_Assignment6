@@ -34,14 +34,12 @@ VALUES
 INSERT INTO `Course_Has_Faculty` (Course_ID,Faculty_ID,Year,Semester,Students)
 VALUES
 ('CE1','FACE1',2014,'Autumn',55),
-('EE2','FAEE1',2013,'Spring',50),
 ('CS1','FACS1',2012,'Spring',45),
 ('ME1','FAME1',2011,'Autumn',11),
 ('CS2','FACS2',2015,'Spring',22),
 ('CE1','FACE1',2016,'Spring',46),
 ('CS1','FACS1',2011,'Autumn',35),
 ('CS1','FACS2',2014,'Spring',58),
-('EE1','FAEE2',2013,'Spring',63),
 ('MEMS1','FAMEMS1',2017,'Autumn',39),
 ('CE1','FACE1',2015,'Spring',41),
 ('CE1','FACE1',2011,'Autumn',22),
@@ -52,7 +50,10 @@ VALUES
 ('MEMS1','FAMEMS1',2014,'Autumn',80),
 ('EE1','FAEE2',2016,'Autumn',13),
 ('MEMS1','FAMEMS1',2015,'Spring',44),
-('EE2','FAEE4',2019,'Autumn',44);
+('EE2','FAEE4',2019,'Autumn',44),
+
+('EE2','FAEE3',2013,'Spring',50),
+('EE2','FAEE3',2013,'Autumn',55);
 
 
 INSERT INTO `TimeTable` (Course_ID,Start_Time,End_Time,Year,Weekda,Room_No,Semester)
@@ -67,7 +68,14 @@ VALUES
 ('CE1','09:00:00','09:50:00',2011,'Saturday','L111','Autumn'),
 ('MEMS1','07:00:00','09:00:00',2015,'Thursday','POD101','Spring'),
 ('MEMS1','06:00:00','08:00:00',2015,'Friday','POD102','Spring'),
-('MEMS1','08:00:00','10:00:00',2015,'Saturday','POD103','Spring');
+('MEMS1','08:00:00','10:00:00',2015,'Saturday','POD103','Spring'),
+
+('EE2','11:24:00','12:36:00',2013,'Saturday','KOD111','Spring'),
+('EE2','11:24:00','12:36:00',2013,'Sunday','KOD111','Spring'),
+('EE2','11:24:00','12:36:00',2013,'Saturday','KOD111','Autumn'),
+('EE2','11:24:00','12:36:00',2013,'Sunday','KOD111','Autumn');
+
+
 
 
 
