@@ -44,6 +44,10 @@ def summary_page():
 
 @app.route('/search_faculty/<string:dept_name>',methods =['GET', 'POST'])
 def search_faculty(dept_name):
+    cur = myconn.cursor()
+    cur.execute('SELECT Department_Name FROM Department')
+    departments = cur.fetchall()
+    myconn.commit()
     session['dept_name_fac'] = dept_name
     if request.method=='POST':
         course=request.form['course']
@@ -76,10 +80,12 @@ def search_faculty(dept_name):
         cur.execute(query)
         courseDetails = cur.fetchall()
         print(courseDetails)
-        return render_template('search_faculty.html',check=True,faculty=courseDetails,query_details=[course,s_time,l_time],d_name=session['dept_name_fac'])
+        return render_template('search_faculty.html',check=True,faculty=courseDetails,query_details=[course,s_time,l_time],d_name=session['dept_name_fac'],departments=departments)
+
+    
 
     if session['dept_name_fac'] == 'none':
-        return render_template('search_faculty.html',check=False,query_details=['','',''],d_name=session['dept_name_fac'])
+        return render_template('search_faculty.html',check=False,query_details=['','',''],d_name=session['dept_name_fac'],departments=departments)
     else:
         dept = session['dept_name_fac']
         cur = myconn.cursor()
@@ -93,10 +99,14 @@ def search_faculty(dept_name):
         cur.execute(q)
         d = cur.fetchall()
         session['dept']=d
-        return render_template('search_faculty.html',check=True,query_details=['','',''],d_name=session['dept_name_fac'])
+        return render_template('search_faculty.html',check=True,query_details=['','',''],d_name=session['dept_name_fac'],departments=departments)
 
 @app.route('/search_course/<string:dept_name>', methods = ['GET', 'POST'])
 def search_course(dept_name):
+    cur = myconn.cursor()
+    cur.execute('SELECT Department_Name FROM Department')
+    departments = cur.fetchall()
+    myconn.commit()
     session['dept_name_course'] = dept_name
     if request.method == 'POST':
         faculty = request.form.get('faculty')
@@ -109,7 +119,7 @@ def search_course(dept_name):
             start_year=int(start_year)
 
         if end_year == 'None':
-            end_year=2020
+            end_year=2021
         else:
             end_year=int(end_year)
 
@@ -125,10 +135,10 @@ def search_course(dept_name):
             cur1.execute(query1)
             course = cur1.fetchall()
             course = list(set(course))
-        return render_template('search_course.html', check=True, course=course,d_name=session['dept_name_course'])
+        return render_template('search_course.html', check=True, course=course,d_name=session['dept_name_course'],departments=departments)
 
     if session['dept_name_course']=='none':
-        return render_template('search_course.html',check=False,course=None,d_name=session['dept_name_course'])
+        return render_template('search_course.html',check=False,course=None,d_name=session['dept_name_course'],departments=departments)
 
     else:
         dept = session['dept_name_course']
@@ -142,7 +152,7 @@ def search_course(dept_name):
         faculty = cur1.fetchall()
         session['faculty'] = list(set(faculty))
         session['dept'] = dept
-        return render_template('search_course.html', check=True, course=course,d_name=session['dept_name_course'])
+        return render_template('search_course.html', check=True, course=course,d_name=session['dept_name_course'],departments=departments)
 
 cur = myconn.cursor()
 

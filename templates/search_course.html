@@ -28,11 +28,10 @@
           Select Department
         </button>
         <ul class="dropdown-menu dropdown-menu-dark" aria-labelledby="navbarDarkDropdownMenuLink">
-            <li><a class="dropdown-item" href="/search_course/Computer Science and Engineering">Computer Science and Engineering</a></li>
-            <li><a class="dropdown-item" href="/search_course/Civil Engineering">Civil Engineering</a></li>
-            <li><a class="dropdown-item" href="/search_course/Electrical Engineering">Electrical Engineering</a></li>
-            <li><a class="dropdown-item" href="/search_course/Mechanical Engineering">Mechanical Engineering</a></li>
-            <li><a class="dropdown-item" href="/search_course/MEMS Engineering">MEMS Engineering</a></li>
+
+            {% for department in departments %}
+             <li><a class="dropdown-item" href="/search_course/{{ department[0] }}">{{ department[0] }}</a></li>
+            {% endfor %}
         </ul>
     </div>
 
