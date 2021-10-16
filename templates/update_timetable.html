@@ -14,7 +14,6 @@
   </head>
   <body>
     <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
-
         <a class="navbar-brand" href="#">Update Timetable</a>
         <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent"
             aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
@@ -29,6 +28,13 @@
             </ul>
         </div>
     </nav>
+
+    {% if error==True %}
+        <div class="alert alert-warning alert-dismissible fade show" role="alert">
+            <strong>Message:</strong> Conflicting Entries not allowed
+            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+        </div>
+    {% endif %}
     
     <h3>Showing Timetable for:</h3>
     <ol class="list-group list-group-numbered">

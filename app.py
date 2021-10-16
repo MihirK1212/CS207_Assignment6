@@ -320,8 +320,11 @@ def deltRelationship():
 
     return render_template('edit_entry.html')
 
+
+
 @app.route('/editTimetable', methods=['GET', 'POST'])
 def editTimetable():
+    error = False
     if request.method=='POST':
         editDetails = request.form
         editYear = editDetails['editYear']
@@ -351,12 +354,13 @@ def editTimetable():
 
         inputDetails = [currCourseName,editCID,editYear,editSemester]
         
-        return render_template('update_timetable.html',currTimeTable=currTimeTable,inputDetails=inputDetails)
+        return render_template('update_timetable.html',currTimeTable=currTimeTable,inputDetails=inputDetails,error=error)
 
     return render_template('edit_entry.html')
 
 @app.route('/updateTimeTable/<int:Time_ID>', methods=['GET', 'POST'])
 def updateTimetable(Time_ID):
+    error = False
     if request.method=='POST':
         updtateDetails = request.form
         cid = session['editCID']
@@ -368,46 +372,39 @@ def updateTimetable(Time_ID):
         weekday = updtateDetails['weekday']
         room_no = updtateDetails['room_no']
 
-        if s_time!='':
-            print("Start Time",s_time)
-            query = '''UPDATE TimeTable SET Start_Time = '%s'  
-                    WHERE Course_ID='%s' and Year=%s and Semester='%s' and Time_ID = %s ''' %(s_time,cid,year,str(semester),int(Time_ID))
-            
-            cur = myconn.cursor()
-            cur.execute(query)
-            myconn.commit()
-        else:
-            print("No s_time")
+        cur=myconn.cursor()
+        cur.execute('SELECT Start_Time,End_Time,Weekda,Room_No FROM TimeTable WHERE Time_ID=%s'%(Time_ID))
+        old_data = cur.fetchone()
+        print(old_data)
+        old_s_time = old_data[0]
+        old_e_time = old_data[1]
+        old_weekday = old_data[2]
+        old_room = old_data[3]
 
-        if e_time!='':
-            query = '''UPDATE TimeTable SET End_Time = '%s'  
-                    WHERE Course_ID='%s' and Year=%s and Semester='%s' and Time_ID = %s
-                    ''' %(e_time,cid,year,str(semester),int(Time_ID))
-            cur = myconn.cursor()
-            cur.execute(query)
-            myconn.commit()
-        else:
-            print("No e_time")
-        
-        if weekday!='':
-            query = '''UPDATE TimeTable SET Weekda = '%s'  
-                    WHERE Course_ID='%s' and Year=%s and Semester='%s' and Time_ID = %s
-                    ''' %(weekday,cid,int(year),semester,int(Time_ID))
-            cur = myconn.cursor()
-            cur.execute(query)
-            myconn.commit()
-        else:
-            print("No weekday")
+        try:
+            if s_time=='':
+                s_time=old_s_time
+            if e_time=='':
+                e_time=old_e_time
+            if weekday=='':
+                weekday=old_weekday
+            if room_no=='':
+                room_no=old_room
 
-        if room_no!='':
-            query = '''UPDATE TimeTable SET Room_No = '%s'  
-                    WHERE Course_ID='%s' and Year=%s and Semester='%s' and Time_ID = %s
-                    ''' %(room_no,cid,int(year),semester,int(Time_ID))
-            cur = myconn.cursor()
-            cur.execute(query)
-            myconn.commit()
-        else:
-            print("No room_no")
+            cur.execute('SELECT * FROM timetable WHERE Year = %s AND Weekda = %s AND Room_No = %s AND Semester = %s AND ((Start_Time < %s AND Start_Time > %s) OR (End_Time > %s AND End_Time < %s) OR (Start_Time > %s AND End_Time < %s) OR (Start_Time <= %s AND End_Time >= %s))', (year, weekday, room_no, semester, e_time, s_time, s_time, e_time, s_time, e_time, s_time, e_time, ))
+            conflicting_time = cur.fetchone()
+            if conflicting_time != None:
+                error=True
+            else:
+                query = '''UPDATE TimeTable SET Start_Time = '%s',End_Time='%s',Weekda='%s',Room_No='%s'  
+                        WHERE Course_ID='%s' and Year=%s and Semester='%s' and Time_ID = %s ''' %(s_time,e_time,weekday,room_no,cid,year,str(semester),int(Time_ID))
+                
+                cur = myconn.cursor()
+                cur.execute(query)
+                myconn.commit()
+        except:
+            print("Confilicting Entries...Not Allowed")
+            error=True
 
     editCID = session['editCID']
     editYear = session['editYear']
@@ -432,7 +429,7 @@ def updateTimetable(Time_ID):
 
     inputDetails = [currCourseName,editCID,editYear,editSemester]
 
-    return render_template('update_timetable.html',currTimeTable=currTimeTable,inputDetails=inputDetails)
+    return render_template('update_timetable.html',currTimeTable=currTimeTable,inputDetails=inputDetails,error=error)
 
 @app.route('/deleteRow/<int:Time_ID>', methods=['GET', 'POST'])
 def deleteRow(Time_ID):
