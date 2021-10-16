@@ -27,7 +27,7 @@ def summary_page():
         year = queryDetails['year']
         print(year,semester)
         query = '''
-        SELECT cf.Course_ID,c.Course_Name,c.Department_Name,cf.Faculty_ID,f.Faculty_Name,tt.Weekday,tt.Start_Time,
+        SELECT cf.Course_ID,c.Course_Name,c.Department_Name,cf.Faculty_ID,f.Faculty_Name,tt.Weekda,tt.Start_Time,
                tt.End_Time,tt.Semester,tt.Room_No,tt.Year
         FROM Course_Has_Faculty cf 
         JOIN TimeTable tt on cf.Course_ID = tt.Course_ID  AND cf.Year = tt.Year AND cf.Semester = tt.Semester
