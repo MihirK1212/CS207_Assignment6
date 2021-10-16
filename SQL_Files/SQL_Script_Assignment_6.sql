@@ -32,6 +32,7 @@ CREATE TABLE IF NOT EXISTS `Course_Has_Faculty` (
     
     
 CREATE TABLE IF NOT EXISTS `TimeTable` (
+  `Time_ID` INT AUTO_INCREMENT,
   `Course_ID` VARCHAR(45) NOT NULL,
   `Start_Time` TIME,
   `End_Time` TIME,
@@ -39,6 +40,7 @@ CREATE TABLE IF NOT EXISTS `TimeTable` (
   `Weekda` VARCHAR(45) ,
   `Room_No` VARCHAR(45) ,
   `Semester` VARCHAR(45) ,
+  KEY (`Time_ID`),
   PRIMARY KEY(`Course_ID`,`Start_Time`,`End_Time`,`Year`,`Weekda`,`Room_No`,`Semester`),
  FOREIGN KEY (`Course_ID`,`Year`,`Semester`) REFERENCES `Course_Has_Faculty` (`Course_ID`,`Year`,`Semester`) ON DELETE CASCADE
 );

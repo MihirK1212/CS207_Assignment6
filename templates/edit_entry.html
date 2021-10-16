@@ -19,7 +19,7 @@
                         <form action="/deltRelationship" method="post">
                             <p>
                                 <label for="deltYear">Year</label>
-                                <input type="number" class="form-input" name="deltYear" id="deltYear" placeholder="Enter Year" min="2009" max="2099" step="1" value="2021">
+                                <input type="number" class="form-input" name="deltYear" id="deltYear" placeholder="Enter Year" min="2009" max="2099" step="1" value="2021" required>
                             </p>
                             <p>
                             <select class="form-select" aria-label="Default select example" name="deltSemester">
@@ -44,25 +44,24 @@
                 
             <div class="col-md-6">
                 <div class="login-card">
-                    <h2 class="text-center mb-4">Sign Up</h2>
-                    <form action="/register" method="post">
+                    <h2 class="text-center mb-4">Edit Timetable</h2>
+                    <form action="/editTimetable" method="post">
                         <p>
-                            <label for="regUserName">Name</label>
-                            <input type="text" class="form-input" name="regUserName" id="regUserName" placeholder="Enter UserName">
-                        </p>
-                        <!-- <p>
-                            <label for="regEmail">Email</label>
-                            <input type="email" class="form-input" name="regEmail" id="regEmail" placeholder="Enter your email address" required>
-                        </p> -->
-                        <p>
-                            <label for="regPassword">Password</label>
-                            <input type="password" class="form-input" name="regPassword" id="regPassword" placeholder="Enter your password" required>
+                            <label for="editYear">Year</label>
+                            <input type="number" class="form-input" name="editYear" id="editYear" placeholder="Enter Year" min="2009" max="2099" step="1" value="2021" required>
                         </p>
                         <p>
-                            <label for="regConPassword">Password</label>
-                            <input type="password" class="form-input" name="regConPassword" id="regConPassword" placeholder="Confirm Password" required>
+                        <select class="form-select" aria-label="Default select example" name="editSemester">
+                            <option selected>Choose Semester</option>
+                            <option value="Autumn">Autumn</option>
+                            <option value="Spring">Spring</option>
+                        </select>
                         </p>
-                        <input type="submit" class="btn btn-primary" value="Register">
+                        <p>
+                            <label for="editCID">Enter Course ID</label>
+                            <input type="text" class="form-input" name="editCID" id="editCID" placeholder="Enter Course ID" required>
+                        </p>
+                        <input type="submit" class="btn btn-primary" value="EditTimetable">
                     </form>
                 </div>
             </div>

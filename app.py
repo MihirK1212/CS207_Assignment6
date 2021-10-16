@@ -1,8 +1,10 @@
+from configparser import ExtendedInterpolation
 from re import A
 # import cur as cur
 from flask import Flask, render_template, request,session
 from flask_mysqldb import MySQL
 import mysql.connector
+from werkzeug.utils import redirect
 
 app = Flask(__name__)
 app.secret_key = 'Amit Kumar Makkad'
@@ -263,7 +265,7 @@ def add_classes():
             if conflicting_time != None:
                 adcl = "Entries you made are conflicting"
             else:
-                cur.execute('INSERT INTO timetable VALUES (%s, %s, %s, %s, %s, %s, %s)', (course_id, start_time, end_time, year, weekday, room_no, semester, ))
+                cur.execute('INSERT INTO timetable(Course_ID,Start_Time,End_Time,Year,Weekda,Room_No,Semester) VALUES (%s, %s, %s, %s, %s, %s, %s)',(course_id, start_time, end_time, int(year), weekday, room_no, semester))
                 myconn.commit()
                 adcl = "Added Successfully!!"
         else:
@@ -308,6 +310,154 @@ def deltRelationship():
 
     return render_template('edit_entry.html')
 
-   
+@app.route('/editTimetable', methods=['GET', 'POST'])
+def editTimetable():
+    if request.method=='POST':
+        editDetails = request.form
+        editYear = editDetails['editYear']
+        editSemester = editDetails['editSemester']
+        editCID = editDetails['editCID']
+        
+        query = '''SELECT * FROM TimeTable 
+            WHERE Course_ID = '%s' and Year = %s and Semester = '%s'
+            ''' %(editCID,editYear,editSemester)
+
+        getCourseName = '''SELECT Course_Name FROM Course 
+            WHERE Course_ID = '%s'
+            ''' %(editCID)
+
+        session['editCID'] = editCID
+        session['editYear'] = editYear
+        session['editSemester'] = editSemester
+        
+        cur = myconn.cursor()
+        cur.execute(query)
+        currTimeTable = cur.fetchall()
+        myconn.commit()
+
+        cur.execute(getCourseName)
+        currCourseName = (cur.fetchall())[0][0]
+        myconn.commit()
+
+        inputDetails = [currCourseName,editCID,editYear,editSemester]
+        
+        return render_template('update_timetable.html',currTimeTable=currTimeTable,inputDetails=inputDetails)
+
+    return render_template('edit_entry.html')
+
+@app.route('/updateTimeTable/<int:Time_ID>', methods=['GET', 'POST'])
+def updateTimetable(Time_ID):
+    if request.method=='POST':
+        updtateDetails = request.form
+        cid = session['editCID']
+        year = session['editYear']
+        semester = session['editSemester']
+
+        s_time = updtateDetails['s_time']
+        e_time = updtateDetails['e_time']
+        weekday = updtateDetails['weekday']
+        room_no = updtateDetails['room_no']
+
+        if s_time!='':
+            print("Start Time",s_time)
+            query = '''UPDATE TimeTable SET Start_Time = '%s'  
+                    WHERE Course_ID='%s' and Year=%s and Semester='%s' and Time_ID = %s ''' %(s_time,cid,year,str(semester),int(Time_ID))
+            
+            cur = myconn.cursor()
+            cur.execute(query)
+            myconn.commit()
+        else:
+            print("No s_time")
+
+        if e_time!='':
+            query = '''UPDATE TimeTable SET End_Time = '%s'  
+                    WHERE Course_ID='%s' and Year=%s and Semester='%s' and Time_ID = %s
+                    ''' %(e_time,cid,year,str(semester),int(Time_ID))
+            cur = myconn.cursor()
+            cur.execute(query)
+            myconn.commit()
+        else:
+            print("No e_time")
+        
+        if weekday!='':
+            query = '''UPDATE TimeTable SET Weekda = '%s'  
+                    WHERE Course_ID='%s' and Year=%s and Semester='%s' and Time_ID = %s
+                    ''' %(weekday,cid,int(year),semester,int(Time_ID))
+            cur = myconn.cursor()
+            cur.execute(query)
+            myconn.commit()
+        else:
+            print("No weekday")
+
+        if room_no!='':
+            query = '''UPDATE TimeTable SET Room_No = '%s'  
+                    WHERE Course_ID='%s' and Year=%s and Semester='%s' and Time_ID = %s
+                    ''' %(room_no,cid,int(year),semester,int(Time_ID))
+            cur = myconn.cursor()
+            cur.execute(query)
+            myconn.commit()
+        else:
+            print("No room_no")
+
+    editCID = session['editCID']
+    editYear = session['editYear']
+    editSemester = session['editSemester']
+
+    query = '''SELECT * FROM TimeTable 
+            WHERE Course_ID = '%s' and Year = %s and Semester = '%s'
+            ''' %(editCID,editYear,editSemester)
+
+    getCourseName = '''SELECT Course_Name FROM Course 
+            WHERE Course_ID = '%s'
+            ''' %(editCID)
+
+    cur = myconn.cursor()
+    cur.execute(query)
+    currTimeTable = cur.fetchall()
+    myconn.commit()
+
+    cur.execute(getCourseName)
+    currCourseName = (cur.fetchall())[0][0]
+    myconn.commit()
+
+    inputDetails = [currCourseName,editCID,editYear,editSemester]
+
+    return render_template('update_timetable.html',currTimeTable=currTimeTable,inputDetails=inputDetails)
+
+@app.route('/deleteRow/<int:Time_ID>', methods=['GET', 'POST'])
+def deleteRow(Time_ID):
+    query = '''DELETE FROM TimeTable
+            WHERE Time_ID=%s'''%(Time_ID)
+
+    cur= myconn.cursor()
+    cur.execute(query)
+    myconn.commit()
+    editCID = session['editCID']
+    editYear = session['editYear']
+    editSemester = session['editSemester']
+
+    query = '''SELECT * FROM TimeTable 
+            WHERE Course_ID = '%s' and Year = %s and Semester = '%s'
+            ''' %(editCID,editYear,editSemester)
+
+    getCourseName = '''SELECT Course_Name FROM Course 
+            WHERE Course_ID = '%s'
+            ''' %(editCID)
+
+    cur = myconn.cursor()
+    cur.execute(query)
+    currTimeTable = cur.fetchall()
+    myconn.commit()
+
+    cur.execute(getCourseName)
+    currCourseName = (cur.fetchall())[0][0]
+    myconn.commit()
+
+    inputDetails = [currCourseName,editCID,editYear,editSemester]
+
+    return render_template('update_timetable.html',currTimeTable=currTimeTable,inputDetails=inputDetails)
+    
+
+        
 if __name__ == '__main__':
     app.run(debug=True, port=8000)

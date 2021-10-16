@@ -1,0 +1,137 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <!-- Required meta tags -->
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel= "stylesheet" type= "text/css" href= "{{ url_for('static',filename='css/styles.css') }}">
+    
+    <!-- Bootstrap CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.1/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-F3w7mX95PdgyTmZZMECAngseQB83DfGTowi0iMjiWaeVhAn4FJkqJByhZMI3AhiU" crossorigin="anonymous">
+
+
+    <title>Edit Timetable</title>
+  </head>
+  <body>
+    
+    <h3>Showing Timetable for:</h3>
+    <ol class="list-group list-group-numbered">
+      <li class="list-group-item">Course Name : {{ inputDetails[0] }}</li>
+      <li class="list-group-item">Course ID : {{ inputDetails[1] }}</li>
+      <li class="list-group-item">Year : {{ inputDetails[2] }}</li>
+      <li class="list-group-item">Semester : {{ inputDetails[3] }}</li>
+    </ol>
+    <br>
+
+    {% if currTimeTable|length == 0 %}
+     No Timetable Details Available for the given selection
+
+    {% else %}
+
+    <h4>Current Timetable:</h4>
+
+    <table class="coursesTable" >
+        <thead class="thead">
+            <tr>
+                <th>S No</th>
+                <th>Time_ID</th>
+                <th>Course_ID</th>
+                <th>Start_Time</th>
+                <th>End_Time</th>
+                <th>Year</th>
+                <th>Weekday</th>
+                <th>Room_No</th>
+                <th>Semester</th>
+            </tr>
+        </thead>
+      
+        <tbody class="tbody">
+            {% for row in currTimeTable %}
+                <tr>
+                    <td>{{ loop.index }}</td>
+                    {% for detail in row %}
+                        <td>{{detail}}</td>
+                    {% endfor %}     
+                </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+
+    <br><br>
+
+    <h4>Edit Timetable:</h4> 
+
+    <table class="coursesTable" >
+        <thead class="thead">
+            <tr>
+                <th>S No</th>
+                <th>Time_ID</th>
+                <th>Course_ID</th>
+                <th>Start_Time</th>
+                <th>End_Time</th>
+                <th>Year</th>
+                <th>Weekday</th>
+                <th>Room_No</th>
+                <th>Semester</th>
+                <th>Update Row</th>
+                <th>Delete Row</th>
+            </tr>
+        </thead>
+      
+        <tbody class="tbody">
+            {% for row in currTimeTable %}
+            <form action="/updateTimeTable/{{ row.0 }}" method="post">
+                <tr>
+                    <td>{{ loop.index }}</td>
+
+                    {% for detail in row %}
+                        {% if loop.index==3%}
+                        <td><input placeholder="{{detail}}" type="time" id="s_time" name="s_time" style="background-color: #FFAA4C;"></td>
+                        
+                        {% elif loop.index==4%}
+                        <td><input placeholder="{{detail}}" type="time" id="e_time" name="e_time" style="background-color: #FFAA4C;"></td>
+                        
+
+                        {% elif loop.index==6%}
+                        <td><input placeholder="{{detail}}" type="text" id="weekday" name="weekday" style="background-color: #FFAA4C;"></td>
+                        
+                            
+                        {% elif loop.index==7%}
+                        <td><input placeholder="{{detail}}" type="text" id="room_no" name="room_no" style="background-color: #FFAA4C;"></td>
+                        
+                        {% else %}
+                        <td>{{detail}}</td>
+                        {% endif %}
+                    {% endfor %}     
+                    <td><button type="submit" class="btn btn-primary" >Update</button></td>
+                    <td><button type="button" class="btn btn-primary" ><a href="/deleteRow/{{ row.0 }}" style="color: aliceblue;">Delete Row</a></button></td>
+                </tr>
+            </form>
+            {% endfor %}
+        </tbody>
+    </table>
+
+    <br>
+    
+    {% endif %}
+
+    <div class="buttonContainer">
+        <div class="innerDiv">
+          <a href='/hospAfterLogin' type="button" class="hospHomeBtn">Go to Home</a>
+        </div>
+    </div>
+    
+
+    <!-- Optional JavaScript; choose one of the two! -->
+
+    <!-- Option 1: Bootstrap Bundle with Popper -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.1/dist/js/bootstrap.bundle.min.js" integrity="sha384-/bQdsTh/da6pkI1MST/rWKFNjaCP5gBSY4sEBT38Q/9RBh9AH40zEOg7Hlq2THRZ" crossorigin="anonymous"></script>
+
+    <!-- Option 2: Separate Popper and Bootstrap JS -->
+    <!--
+    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.9.3/dist/umd/popper.min.js" integrity="sha384-W8fXfP3gkOKtndU4JGtKDvXbO53Wy8SZCQHczT5FMiiqmQfUpWbYdTil/SxwZgAN" crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.1/dist/js/bootstrap.min.js" integrity="sha384-skAcpIdS7UcVUC05LJ9Dxay8AXcDYfBJqt1CJ85S/CFujBsIzCIv+l9liuYLaMQ/" crossorigin="anonymous"></script>
+    -->
+  </body>
+  <!-- <script src="{{url_for('static', filename='js/update_vaccine.js')}}"></script> -->
+</html>
