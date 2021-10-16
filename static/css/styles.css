@@ -113,6 +113,40 @@ position: relative;
   font-size: 16px;
 }
 
+.field {
+  /* border: 1px black solid; */
+  margin: 1px 15% 50px 15%;
+  border-radius: 8px;
+  box-shadow: 0 0 5px 1px lightgray;
+  padding: 0 10px 5px 10px;
+}
 
+.msg {
+  font-size: 20px;
+  color: dodgerblue;
+}
 
+/* input {
+  margin-top: 5px;
+}
+span {
+  margin-top: 5px;
+} */
+
+input[type="submit"] {
+  margin-bottom: 10px;
+}
+
+h2 {
+  margin-left: 15%;
+}
+
+.field a {
+  margin: 10px 0 10px 0;
+  width: 100%;
+}
+
+.field a:hover {
+  color: white !important;
+}
 
