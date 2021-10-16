@@ -42,17 +42,19 @@
 
         <h1 align="center">Courses of {{ d_name }}</h1><br>
 
-        <form action="/search_course/{{ d_name }}" method="post">
-            <label for="faculty">Faculty:</label>
-            <select name="faculty" id="faculty">
+        <div class="container" my-3>
+        <form action="/search_course/{{ d_name }}" method="post"><br>
+            <label class="form-label" for="faculty">Search by Faculty:</label>
+            <div class="form-group" style="margin-bottom: 20px;">
+            <select name="faculty" id="faculty" class="form-control">
             <option value="None"> None  </option>
             {% for faculty in session.faculty %}
                 <option value="{{ faculty[1] }}" id="{{ faculty[1] }}">{{ faculty[1] }}-{{ faculty[0] }}  </option>
             {% endfor %}
-            </select><br>
-
-            <label for="start_year">Start Year:</label>
-                <select name="start_year" id="start_year">
+            </select><br></div>
+            <div class="mb-3">
+            <label for="start_year" class="form-label">Start Year:</label>
+                <select name="start_year" id="start_year" class="form-control">
                 <option value="None" > None  </option>
                 <option value="2011" id="2011s"> 2011  </option>
                 <option value="2012" id="2012s"> 2012  </option>
@@ -64,10 +66,11 @@
                 <option value="2018" id="2018s"> 2018  </option>
                 <option value="2019" id="2019s"> 2019  </option>
                 <option value="2020" id="2020s"> 2020  </option>
-            </select><br>
+            </select><br></div>
 
-            <label for="end_year">End Year:</label>
-            <select name="end_year" id="end_year">
+            <div class="mb-3">
+            <label for="end_year" class="form-label">End Year:</label>
+            <select name="end_year" id="end_year" class="form-control">
                 <option value="None" > None  </option>
                 <option value="2011" id="2011e"> 2011  </option>
                 <option value="2012" id="2012e"> 2012  </option>
@@ -79,20 +82,27 @@
                 <option value="2018" id="2018e"> 2018  </option>
                 <option value="2019" id="2019e"> 2019  </option>
                 <option value="2020" id="2020e"> 2020  </option>
-            </select><br>
+            </select><br></div>
 
-            <input type="submit" value="Filter">
+            <button type="submit" class="btn btn-primary">Submit</button>
         </form>
-
+        
+        </div>
+        <div class="container my-3" >
         {% if course|length == 0 %}
             No Courses to Display
         {% else %}
             
         
 
-        <table>
+        <table class="table">
+            <th>
+                <td>Course ID</td>
+                <td>Course Name</td>
+            </th>
             {% for course in course %}
             <tr>
+                <td>{{ loop.index }}</td>
                 <td>{{ course[0] }}</td>
                 <td>{{ course[1] }}</td>
             </tr>
